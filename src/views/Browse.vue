@@ -1,3 +1,14 @@
+<template>
+  <div class="browse-page">
+    <div class="browse-header">
+      <h1>Browse</h1>
+      <p>Explore our categories and find your next experience.</p>
+    </div>
+    
+    <!-- Tag ini wajib ada untuk memunculkan komponen EventList.vue -->
+    <router-view></router-view>
+  </div>
+</template>
 <style scoped>
 .browse-page {
   animation: fadeIn 0.4s ease;
