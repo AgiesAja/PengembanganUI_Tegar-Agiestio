@@ -4,9 +4,9 @@ import { RouterView, RouterLink } from 'vue-router';
 
 <template>
   <!-- RAIL & PANE SYSTEM
-  Kerangka khusus untuk kebutuhan produktivitas/pengelolaan aplikasi. -->
+       Kerangka khusus untuk kebutuhan produktivitas/pengelolaan aplikasi. -->
   <div class="dashboard-layout">
-    
+
     <!-- RAIL: Navigasi samping yang posisinya terkunci (fixed) -->
     <aside class="dashboard-rail">
       <div class="rail-brand">
@@ -33,13 +33,15 @@ import { RouterView, RouterLink } from 'vue-router';
         <RouterView />
       </div>
     </main>
-    
+
   </div>
 </template>
 
 <style scoped>
-/* Full-screen app layout (khas dashboard).
-   Tinggi dibatasi 100vh agar bagian rail tidak ikut terguyur ke atas saat pane di-scroll. */
+/*
+  Full-screen app layout (khas dashboard).
+  Tinggi dibatasi 100vh agar bagian rail tidak ikut terguyur ke atas saat pane di-scroll.
+*/
 .dashboard-layout {
   display: flex;
   height: 100vh;
@@ -73,12 +75,11 @@ import { RouterView, RouterLink } from 'vue-router';
 
 .rail-link {
   padding: var(--space-3) var(--space-6);
+  color: #a0a0b0;
   text-decoration: none;
   font-weight: 500;
-  color: #a0a0b0;
-  transition: background 0.25s, color 0.25s;
+  transition: background 0.2s, color 0.2s;
 }
-
 .rail-link:hover, .rail-link.active {
   background-color: rgba(255,255,255,0.05);
   color: white;

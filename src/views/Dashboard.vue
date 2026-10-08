@@ -1,9 +1,9 @@
 <template>
   <div class="dashboard-overview">
     <h2>Welcome back, Organizer</h2>
-    
+
     <!-- GROUPING & PROXIMITY:
-    Data metrik dikelompokkan ke dalam kartu agar mudah dibaca sekilas. -->
+         Data metrik dikelompokkan ke dalam kartu agar mudah dibaca sekilas. -->
     <div class="metrics-grid">
       <div class="metric-card">
         <h3>Total Tickets Sold</h3>
@@ -20,8 +20,8 @@
     </div>
 
     <!-- DATA DENSITY & F-PATTERN:
-    Penggunaan tabel untuk memaksimalkan kepadatan informasi agar mata
-    dapat melakukan scanning baris demi baris (F-Pattern) -->
+         Penggunaan tabel untuk memaksimalkan kepadatan informasi agar mata
+         dapat melakukan scanning baris demi baris (F-Pattern) -->
     <div class="data-table-container">
       <h3>Recent Registrations</h3>
       <table class="data-table">
@@ -36,8 +36,8 @@
         <tbody>
           <tr v-for="i in 5" :key="i">
             <td>John Doe {{ i }}</td>
-            <td>Community Gathering {{i}}</td>
-            <td>Oct 1{{i}}, 2026</td>
+            <td>Community Gathering {{ i }}</td>
+            <td>Oct 1{{ i }}, 2026</td>
             <td><span class="status-badge">Confirmed</span></td>
           </tr>
         </tbody>
@@ -64,7 +64,6 @@
   border: 1px solid var(--border-color);
   box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
-
 .metric-card h3 { font-size: 1rem; color: var(--text-muted); margin-bottom: var(--space-2); }
 .metric-value { font-size: 2.2rem; font-weight: 700; color: var(--primary); margin: 0; }
 
