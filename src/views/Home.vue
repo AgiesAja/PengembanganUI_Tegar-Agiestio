@@ -11,25 +11,28 @@
         </div>
       </div>
     </section>
-    
+
     <section class="features-section">
       <div class="features-header">
         <h2>Why Choose Gatherly?</h2>
         <p>Everything you need to host or attend unforgettable events.</p>
       </div>
+
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon"></div>
+          <div class="feature-icon">🔍</div>
           <h3>Discover Easily</h3>
           <p>Find events tailored to your interests using our smart category and location filters.</p>
         </div>
+
         <div class="feature-card">
-          <div class="feature-icon"></div>
+          <div class="feature-icon">🎟️</div>
           <h3>Seamless Ticketing</h3>
           <p>Register with one click and get your digital QR ticket instantly on your device.</p>
         </div>
+
         <div class="feature-card">
-          <div class="feature-icon"></div>
+          <div class="feature-icon">📊</div>
           <h3>Host Like a Pro</h3>
           <p>Manage attendees, track revenue, and scan QR codes with our comprehensive dashboard.</p>
         </div>
@@ -95,9 +98,9 @@
   transform: translateY(-2px);
 }
 
-/* NEW FEATURES SECTION */
+/* --- NEW FEATURES SECTION --- */
 .features-section {
-  padding: 0 var(--space-12) 0;
+  padding: 0 0 var(--space-12) 0;
 }
 
 .features-header {
@@ -133,7 +136,7 @@
 
 .feature-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
 }
 
 .feature-icon {
