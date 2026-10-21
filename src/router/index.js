@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AppLayout from '@/layouts/App.vue'
+import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
 const routes = [
   {
@@ -31,7 +32,7 @@ const routes = [
             component: () => import('@/views/EventList.vue'),
             meta: { breadcrumb: 'Event List' }
           },
-          {
+                    {
             path: 'events/:id',
             name: 'event-detail',
             component: () => import('@/views/EventDetail.vue'),
@@ -50,6 +51,23 @@ const routes = [
         name: 'contact',
         component: () => import('@/views/Contact.vue'),
         meta: { breadcrumb: 'Contact' }
+      }
+    ]
+  },
+  {
+    /* AREA PENYELENGGARA ACARA (DASHBOARD) */
+    path: '/dashboard',
+    component: DashboardLayout,
+    children: [
+      {
+        path: '',
+        name: 'dashboard-overview',
+        component: () => import('@/views/Dashboard.vue')
+      },
+      {
+        path: 'events',
+        name: 'dashboard-events',
+        component: () => import('@/views/EventManagement.vue')
       }
     ]
   }
