@@ -1,85 +1,174 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 
-const scrolled = ref(false)
-const onScroll = () => {
-  scrolled.value = window.scrollY > 10
+const isScrolled = ref(false)
+const route = useRoute()
+
+const menus = [
+  { name: 'Home', path: '/' },
+  { name: 'About', path: '/about' },
+  {
+    name: 'Browse',
+    path: '/browse',
+    children: [
+      {
+        name: 'Event List',
+        path: '/browse/events',
+      },
+      { name: 'Category', path: '/browse/category' },
+      { name: 'Your Events', path: '/browse/your-events' },
+    ],
+  },
+  { name: 'Contact', path: '/contact' },{ name: 'Organizer Dashboard', path: '/dashboard' },
+]
+
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 10
 }
 
-onMounted(() => window.addEventListener('scroll', onScroll))
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
-  <nav class="navbar" :class="{ scrolled }">
+  <nav class="navbar" :class="{ scrolled: isScrolled }">
     <div class="navbar-container">
-      <!-- LOGO -->
       <router-link to="/" class="logo">
-        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" fill="#6644ff" />
-          <text x="12" y="16" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">G</text>
+        <svg
+          width="28"
+          height="32"
+          viewBox="0 0 24 28"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="logo-icon"
+        >
+          <path d="M12 0L22.3923 6V18L12 24L1.6077 18V6L12 0Z" fill="white" />
+          <path
+            d="M15 9.5 C15 9.5 14 8 12 8 C9.5 8 8 10 8 12.5 C8 15 9.5 17 12 17 C14 17 15 16 15.5 14.5 V 12.5 H 12.5"
+            stroke="#1A1643"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
         <span class="logo-text">Gatherly</span>
       </router-link>
 
-      <!-- MENU UTAMA -->
       <ul class="nav-menu">
-        <li class="nav-item">
-          <router-link to="/" class="nav-link" exact-active-class="active">Home</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/about" class="nav-link" active-class="active">About</router-link>
-        </li>
-
-        <!-- DROPDOWN BROWSE -->
-        <li class="nav-item">
-          <router-link to="/browse" class="nav-link" active-class="active">
-            Browse
-            <svg class="dropdown-indicator" width="12" height="12" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 12 15 18 9" />
+        <li class="nav-item" v-for="menu in menus" :key="menu.name">
+          <router-link
+            :to="menu.path"
+            class="nav-link"
+            :class="{
+              active:
+                route.path === menu.path || (menu.path !== '/' && route.path.startsWith(menu.path)),
+            }"
+          >
+            {{ menu.name }}
+            <svg
+              v-if="menu.children"
+              class="dropdown-indicator"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </router-link>
-          <ul class="dropdown-menu">
-            <li class="dropdown-item">
-              <router-link to="/browse/events" class="dropdown-link">Event List</router-link>
-            </li>
-            <li class="dropdown-item">
-              <router-link to="/browse/category" class="dropdown-link">Category</router-link>
+
+          <!-- First Level Dropdown -->
+          <ul v-if="menu.children" class="dropdown-menu">
+            <li v-for="child in menu.children" :key="child.name" class="dropdown-item">
+              <router-link :to="child.path" class="dropdown-link">
+                {{ child.name }}
+                <svg
+                  v-if="child.children"
+                  class="submenu-indicator"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </router-link>
+
+              <!-- Second Level Dropdown (Submenu) -->
+              <ul v-if="child.children" class="submenu">
+                <li v-for="subchild in child.children" :key="subchild.name" class="submenu-item">
+                  <router-link :to="subchild.path" class="dropdown-link">
+                    {{ subchild.name }}
+                  </router-link>
+                </li>
+              </ul>
             </li>
           </ul>
         </li>
-
-        <li class="nav-item">
-          <router-link to="/contact" class="nav-link" active-class="active">Contact</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/dashboard" class="nav-link" active-class="active">Organizer Dashboard</router-link>
-        </li>
       </ul>
 
-      <!-- BAGIAN KANAN -->
       <div class="nav-right">
         <div class="lang-selector">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="2" y1="12" x2="22" y2="12" />
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path
+              d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+            ></path>
           </svg>
-          <span>EN</span>
-          <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9" />
+          <span class="lang-text">EN</span>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="chevron"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </div>
 
-        <button class="hamburger-btn" aria-label="Menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round">
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
+        <button class="hamburger-btn">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
           </svg>
         </button>
       </div>
@@ -126,25 +215,20 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   padding-right: 2rem;
   transition: transform 0.3s ease;
 }
-
 .logo:hover {
   transform: translateY(-2px);
 }
-
 .logo-icon {
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 .logo:hover .logo-icon {
   transform: rotate(15deg) scale(1.1);
 }
-
 .logo-text {
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
-
 .nav-menu {
   display: flex;
   align-items: center;
@@ -161,7 +245,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 1rem 0;
+  padding: 1rem 0; /* Memberi ruang hover */
 }
 
 .nav-link {
@@ -182,12 +266,10 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   font-weight: 600;
   box-shadow: 0 4px 15px rgba(102, 68, 255, 0.3);
 }
-
 .nav-link.active:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 68, 255, 0.5);
 }
-
 .nav-link:not(.active):hover {
   background-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
@@ -196,18 +278,21 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .dropdown-indicator {
   transition: transform 0.3s ease;
 }
-
 .nav-item:hover .dropdown-indicator {
   transform: rotate(180deg);
 }
 
-/* DROPDOWN & SUBMENU */
+/* ==================================
+   DROPDOWN & SUBMENU STYLES
+   Inspired by user reference image
+   ================================== */
 .dropdown-menu {
-  display: none;
+  display: none; /* diubah jadi block saat hover */
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: #d8d8d8;
+
+  background-color: #d8d8d8; /* warna abu seperti referensi */
   min-width: 200px;
   list-style: none;
   padding: 0;
@@ -216,13 +301,14 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   border-radius: 4px;
 }
 
+/* Tampilkan dropdown level 1 saat nav-item di-hover */
 .nav-item:hover .dropdown-menu {
   display: block;
   animation: fadeIn 0.2s ease-out;
 }
 
 .dropdown-item {
-  position: relative;
+  position: relative; /* relative untuk submenu absolut */
 }
 
 .dropdown-link {
@@ -231,7 +317,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   align-items: center;
   padding: 12px 20px;
   text-decoration: none;
-  color: #333;
+  color: #333; /* text gelap */
   font-size: 0.95rem;
   transition:
     background-color 0.2s,
@@ -240,14 +326,15 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 }
 
 .dropdown-link:hover {
-  background-color: #c4c4c4;
+  background-color: #c4c4c4; /* efek hover lebih gelap sedikit */
   color: #000;
 }
 
+/* Hilangkan border bawah pada item terakhir */
 .dropdown-item:last-child .dropdown-link {
   border-bottom: none;
 }
-
+/* Submenu (Level 2) */
 .submenu {
   display: none;
   position: absolute;
@@ -262,6 +349,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   border-radius: 4px;
 }
 
+/* Tampilkan submenu level 2 saat dropdown-item di-hover */
 .dropdown-item:hover .submenu {
   display: block;
   animation: fadeIn 0.2s ease-out;
@@ -272,20 +360,24 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
     opacity: 0;
     transform: translateY(-5px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* RIGHT SECTION */
+/* Submenu pada parent (jika left:100% terlalu mentok layar)
+   Kita bisa membiarkannya default left 100%.
+*/
+
+/* ==================================
+   RIGHT SECTION
+   ================================== */
 .nav-right {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
-
 .lang-selector {
   display: flex;
   align-items: center;
@@ -298,20 +390,16 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   border-radius: 8px;
   transition: all 0.3s ease;
 }
-
 .lang-selector:hover {
   background: rgba(255, 255, 255, 0.1);
 }
-
 .lang-selector:hover .chevron {
   transform: translateY(2px);
 }
-
 .chevron {
   transition: transform 0.3s ease;
   margin-top: 2px;
 }
-
 .hamburger-btn {
   display: flex;
   align-items: center;
@@ -325,7 +413,6 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 .hamburger-btn:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: scale(1.05);
@@ -336,12 +423,10 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
     gap: 1rem;
   }
 }
-
 @media (max-width: 768px) {
   .nav-menu {
     display: none;
   }
-
   .lang-selector {
     display: none;
   }
